@@ -33,7 +33,8 @@ class EpubBook(models.Model):
     source_url = models.CharField(max_length=500, blank=True, default="")
     identifier = models.CharField(max_length=255, blank=True, default="")
 
-    file_path = models.CharField(max_length=1000, unique=True, db_index=True)
+    file_path = models.CharField(max_length=1000, blank=True, db_index=True)
+    epub_file = models.FileField(upload_to="epubs/", blank=True, null=True, help_text="Upload .epub directly via admin")
     file_size_bytes = models.BigIntegerField(default=0)
     total_chapters = models.PositiveIntegerField(default=0)
     total_characters = models.PositiveIntegerField(default=0)
@@ -53,6 +54,12 @@ class EpubBook(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.author})"
+
+    @property
+    def absolute_file_path(self):
+        if self.epub_file:
+            return self.epub_file.path
+        return self.file_path
 
     @property
     def file_size_mb(self):

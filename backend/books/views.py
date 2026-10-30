@@ -89,15 +89,16 @@ class EpubDownloadView(APIView):
         except EpubBook.DoesNotExist:
             raise Http404("Buku ePub tidak ditemukan.")
 
-        if not os.path.exists(book.file_path):
+        target_path = book.absolute_file_path
+        if not target_path or not os.path.exists(target_path):
             raise Http404("File ePub pada storage server tidak ditemukan.")
 
         # Increment atomic download counter
         EpubBook.objects.filter(pk=pk).update(download_count=F("download_count") + 1)
 
-        filename = os.path.basename(book.file_path)
+        filename = os.path.basename(target_path)
         # Handle UTF-8 / ASCII safe filename header
-        response = FileResponse(open(book.file_path, "rb"), content_type="application/epub+zip")
+        response = FileResponse(open(target_path, "rb"), content_type="application/epub+zip")
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
         response["Access-Control-Expose-Headers"] = "Content-Disposition"
         return response

@@ -1,6 +1,9 @@
 import React from 'react';
+import { getAdminAddUrl } from '../api';
 
 export default function Navbar({ onOpenScan, searchQuery, onSearchChange, onSearchSubmit }) {
+  const adminAddUrl = getAdminAddUrl();
+
   return (
     <header className="border-bottom bg-white sticky-top shadow-xs">
       <nav className="navbar navbar-expand-lg navbar-light py-2">
@@ -32,15 +35,25 @@ export default function Navbar({ onOpenScan, searchQuery, onSearchChange, onSear
             </div>
           </form>
 
-          {/* Right Action: Clean scan button in English */}
-          <div className="d-flex align-items-center">
+          {/* Right Actions: Upload ePub shortcut & Scan button */}
+          <div className="d-flex align-items-center gap-2">
+            <a
+              href={adminAddUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-dark btn-sm rounded-pill px-3 fw-medium d-inline-flex align-items-center gap-1 shadow-xs"
+              title="Upload new .epub file directly to server"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              + Upload EPUB
+            </a>
             <button
               type="button"
               onClick={onOpenScan}
-              className="btn btn-outline-dark btn-sm rounded-pill px-3 fw-medium"
+              className="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium"
               title="Scan local directory for ePub files"
             >
-              + Scan Folder
+              Scan Folder
             </button>
           </div>
         </div>

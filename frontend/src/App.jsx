@@ -434,26 +434,37 @@ export default function App() {
       <footer className="footer mt-auto py-3 bg-white border-top text-center text-muted small" style={{ fontSize: '12px' }}>
         <div className="container d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
           <span>Novel MTL Archive &copy; 2026 &bull; Direct Offline MTL EPUB Downloader</span>
-          <span className="text-secondary">
-            UI theme adapted from{' '}
+          <div className="d-flex align-items-center gap-3">
             <a
-              href="https://github.com/taufiq-azr/lara-novelku"
+              href={`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/admin/`}
               target="_blank"
               rel="noreferrer"
-              className="text-decoration-none fw-medium text-dark"
+              className="text-decoration-none text-muted"
+              title="Server Admin Dashboard"
             >
-              lara-novelku
-            </a>{' '}
-            by{' '}
-            <a
-              href="https://github.com/taufiq-azr"
-              target="_blank"
-              rel="noreferrer"
-              className="text-decoration-none fw-semibold text-dark"
-            >
-              @taufiq-azr
+              ⚙ Admin Panel
             </a>
-          </span>
+            <span className="text-secondary">
+              UI theme adapted from{' '}
+              <a
+                href="https://github.com/taufiq-azr/lara-novelku"
+                target="_blank"
+                rel="noreferrer"
+                className="text-decoration-none fw-medium text-dark"
+              >
+                lara-novelku
+              </a>{' '}
+              by{' '}
+              <a
+                href="https://github.com/taufiq-azr"
+                target="_blank"
+                rel="noreferrer"
+                className="text-decoration-none fw-semibold text-dark"
+              >
+                @taufiq-azr
+              </a>
+            </span>
+          </div>
         </div>
       </footer>
 

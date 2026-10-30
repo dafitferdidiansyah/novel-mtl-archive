@@ -66,3 +66,11 @@ export const triggerScan = async (folderPath = '') => {
 export const getDownloadUrl = (id) => {
   return `${BASE_URL}/api/books/${id}/download/`;
 };
+
+export const getAdminAddUrl = () => {
+  return `${BASE_URL}/admin/books/epubbook/add/`;
+};
+
+export const getAdminUrl = () => {
+  return `${BASE_URL}/admin/`;
+};

@@ -3,12 +3,13 @@ import Navbar from './components/Navbar';
 import BookCard from './components/BookCard';
 import BookModal from './components/BookModal';
 import ScanModal from './components/ScanModal';
-import { fetchBooks, fetchGenres, fetchStats } from './api';
+import { fetchBooks, fetchGenres, fetchStats, fetchReaderApps } from './api';
 
 export default function App() {
   const [books, setBooks] = useState([]);
   const [genres, setGenres] = useState([]);
   const [stats, setStats] = useState(null);
+  const [readerApps, setReaderApps] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Search & Basic Filters
@@ -37,9 +38,10 @@ export default function App() {
   // Metadata
   const loadMeta = useCallback(async () => {
     try {
-      const [gData, sData] = await Promise.all([fetchGenres(), fetchStats()]);
+      const [gData, sData, rData] = await Promise.all([fetchGenres(), fetchStats(), fetchReaderApps()]);
       setGenres(gData || []);
       setStats(sData || null);
+      setReaderApps(rData || []);
     } catch (err) {
       console.warn('Failed to fetch metadata:', err);
     }
@@ -155,6 +157,7 @@ export default function App() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchSubmit={handleSearchSubmit}
+        readerApps={readerApps}
       />
 
       <main className="container-fluid px-3 px-md-5 my-4 flex-grow-1">
@@ -435,6 +438,23 @@ export default function App() {
         <div className="container d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
           <span>Novel MTL Archive &copy; 2026 &bull; Direct Offline MTL EPUB Downloader</span>
           <div className="d-flex align-items-center gap-3">
+            {readerApps && readerApps.length > 0 && (
+              <div className="d-flex align-items-center gap-2">
+                <span className="text-secondary">EPUB Readers:</span>
+                {readerApps.map((app) => (
+                  <a
+                    key={app.id}
+                    href={app.download_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="badge bg-light text-dark border text-decoration-none py-1 px-2"
+                    title={`Download ${app.name} APK`}
+                  >
+                    📱 {app.name} {app.version}
+                  </a>
+                ))}
+              </div>
+            )}
             <a
               href={`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/admin/`}
               target="_blank"

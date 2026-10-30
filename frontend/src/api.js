@@ -50,6 +50,14 @@ export const fetchStats = async () => {
   return await res.json();
 };
 
+export const fetchReaderApps = async () => {
+  const res = await fetch(`${BASE_URL}/api/apps/`, {
+    headers: defaultHeaders,
+  });
+  if (!res.ok) return [];
+  return await res.json();
+};
+
 export const triggerScan = async (folderPath = '') => {
   const res = await fetch(`${BASE_URL}/api/scan/`, {
     method: 'POST',

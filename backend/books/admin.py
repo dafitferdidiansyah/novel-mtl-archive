@@ -1,7 +1,24 @@
 from django.contrib import admin
 from django.core.files.base import ContentFile
-from .models import EpubBook, Genre
+from .models import EpubBook, Genre, ReaderApp
 from .scanner import parse_epub
+
+
+@admin.register(ReaderApp)
+class ReaderAppAdmin(admin.ModelAdmin):
+    list_display = ["name", "version", "file_size_mb", "is_active", "download_count", "created_at"]
+    list_filter = ["is_active", "created_at"]
+    search_fields = ["name", "version", "description"]
+    fields = [
+        "name",
+        "version",
+        "description",
+        "apk_file",
+        "external_url",
+        "icon",
+        "is_active",
+        "download_count",
+    ]
 
 
 @admin.register(Genre)

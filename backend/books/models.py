@@ -19,6 +19,41 @@ class Genre(models.Model):
         super().save(*args, **kwargs)
 
 
+class ReaderApp(models.Model):
+    """Reader APK/App for reading EPUBs (e.g. Moon+ Reader Pro)."""
+    name = models.CharField(max_length=150, help_text="e.g. Moon+ Reader Pro")
+    version = models.CharField(max_length=50, blank=True, default="", help_text="e.g. v9.3")
+    description = models.TextField(blank=True, default="Aplikasi pembaca EPUB/e-book terbaik untuk Android dengan dukungan kustomisasi font, tema, dan TTS.")
+    apk_file = models.FileField(upload_to="apps/", blank=True, null=True, help_text="Upload .apk file")
+    external_url = models.URLField(blank=True, default="", help_text="Alternatif link download jika file di-host eksternal (Google Drive / Direct link)")
+    icon = models.ImageField(upload_to="app_icons/", blank=True, null=True, help_text="Icon aplikasi")
+    is_active = models.BooleanField(default=True)
+    download_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} {self.version}".strip()
+
+    @property
+    def file_size_mb(self):
+        if self.apk_file and hasattr(self.apk_file, "size"):
+            try:
+                return round(self.apk_file.size / (1024 * 1024), 2)
+            except Exception:
+                return 0.0
+        return 0.0
+
+    @property
+    def download_url(self):
+        if self.apk_file:
+            return self.apk_file.url
+        return self.external_url
+
+
 class EpubBook(models.Model):
     """Metadata and local path tracking for an EPUB file."""
     id = models.BigAutoField(primary_key=True)

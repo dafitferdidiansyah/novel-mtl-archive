@@ -1,5 +1,42 @@
 from rest_framework import serializers
-from .models import EpubBook, Genre
+from .models import EpubBook, Genre, ReaderApp
+
+
+class ReaderAppSerializer(serializers.ModelSerializer):
+    file_size_mb = serializers.FloatField(read_only=True)
+    download_url = serializers.SerializerMethodField()
+    icon_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ReaderApp
+        fields = [
+            "id",
+            "name",
+            "version",
+            "description",
+            "download_url",
+            "icon_url",
+            "file_size_mb",
+            "download_count",
+            "created_at",
+        ]
+
+    def get_download_url(self, obj):
+        request = self.context.get("request")
+        if obj.apk_file:
+            url = f"/api/apps/{obj.id}/download/"
+            if request is not None:
+                return request.build_absolute_uri(url)
+            return url
+        return obj.external_url
+
+    def get_icon_url(self, obj):
+        request = self.context.get("request")
+        if obj.icon:
+            if request is not None:
+                return request.build_absolute_uri(obj.icon.url)
+            return obj.icon.url
+        return ""
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -13,9 +50,17 @@ class GenreSerializer(serializers.ModelSerializer):
 class EpubBookListSerializer(serializers.ModelSerializer):
     genres = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     file_size_mb = serializers.FloatField(read_only=True)
-    cover = serializers.CharField(source="display_cover", read_only=True)
+    cover = serializers.SerializerMethodField()
     chars_display = serializers.CharField(read_only=True)
     download_url = serializers.SerializerMethodField()
+
+    def get_cover(self, obj):
+        request = self.context.get("request")
+        cover_path = obj.display_cover
+        if cover_path and not cover_path.startswith("http"):
+            if request is not None:
+                return request.build_absolute_uri(cover_path)
+        return cover_path
 
     class Meta:
         model = EpubBook
@@ -55,9 +100,17 @@ class EpubBookListSerializer(serializers.ModelSerializer):
 class EpubBookDetailSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     file_size_mb = serializers.FloatField(read_only=True)
-    cover = serializers.CharField(source="display_cover", read_only=True)
+    cover = serializers.SerializerMethodField()
     chars_display = serializers.CharField(read_only=True)
     download_url = serializers.SerializerMethodField()
+
+    def get_cover(self, obj):
+        request = self.context.get("request")
+        cover_path = obj.display_cover
+        if cover_path and not cover_path.startswith("http"):
+            if request is not None:
+                return request.build_absolute_uri(cover_path)
+        return cover_path
 
     class Meta:
         model = EpubBook

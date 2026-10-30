@@ -8,4 +8,6 @@ urlpatterns = [
     path("genres/", views.GenreListView.as_view(), name="genre-list"),
     path("scan/", views.TriggerScanView.as_view(), name="trigger-scan"),
     path("stats/", views.StatsView.as_view(), name="stats"),
+    path("apps/", views.ReaderAppListView.as_view(), name="app-list"),
+    path("apps/<int:pk>/download/", views.ReaderAppDownloadView.as_view(), name="app-download"),
 ]

@@ -7,11 +7,12 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
 
-from .models import EpubBook, Genre
+from .models import EpubBook, Genre, ReaderApp
 from .serializers import (
     EpubBookListSerializer,
     EpubBookDetailSerializer,
     GenreSerializer,
+    ReaderAppSerializer,
 )
 from .scanner import scan_epub_directory
 
@@ -140,3 +141,34 @@ class StatsView(APIView):
             "total_size_mb": round(total_bytes / (1024 * 1024), 2),
             "total_genres": total_genres,
         })
+
+
+class ReaderAppListView(generics.ListAPIView):
+    """List active reader APKs / apps for users to download."""
+    queryset = ReaderApp.objects.filter(is_active=True)
+    serializer_class = ReaderAppSerializer
+    pagination_class = None
+
+
+class ReaderAppDownloadView(APIView):
+    """Serve APK file download and increment count."""
+
+    def get(self, request, pk):
+        try:
+            app = ReaderApp.objects.get(pk=pk, is_active=True)
+        except ReaderApp.DoesNotExist:
+            raise Http404("Aplikasi tidak ditemukan.")
+
+        if not app.apk_file or not os.path.exists(app.apk_file.path):
+            if app.external_url:
+                from django.shortcuts import redirect
+                ReaderApp.objects.filter(pk=pk).update(download_count=F("download_count") + 1)
+                return redirect(app.external_url)
+            raise Http404("File APK tidak ditemukan di server.")
+
+        ReaderApp.objects.filter(pk=pk).update(download_count=F("download_count") + 1)
+        filename = os.path.basename(app.apk_file.path)
+        response = FileResponse(open(app.apk_file.path, "rb"), content_type="application/vnd.android.package-archive")
+        response["Content-Disposition"] = f'attachment; filename="{filename}"'
+        response["Access-Control-Expose-Headers"] = "Content-Disposition"
+        return response

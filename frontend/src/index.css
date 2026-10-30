@@ -1,0 +1,128 @@
+body {
+  color: #2b2f38;
+  background-color: #f7f8fa;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Subtle card styling ala Moco / NovelKu clean */
+.card-clean-novel {
+  border: 1px solid #ebeef2;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.card-clean-novel:hover {
+  transform: translateY(-2px);
+  border-color: #d0d7de;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.ratio-cover-container {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #eaecef;
+}
+
+.novel-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.card-clean-novel:hover .novel-cover-img {
+  transform: scale(1.03);
+}
+
+.carousel-cover-img {
+  height: 175px;
+  width: 120px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.carousel-cover-img:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Tri-State Multi-Select Chips: Neutral (0), Include (1), Exclude (2) */
+.tristate-chip {
+  cursor: pointer;
+  user-select: none;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 400;
+  border: 1px solid #e1e4e8;
+  background-color: #ffffff;
+  color: #4b5563;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tristate-chip:hover {
+  background-color: #f3f4f6;
+  border-color: #cbd5e1;
+}
+
+/* State 1: Include (Green) */
+.tristate-chip.state-include {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-color: #10b981;
+  font-weight: 600;
+}
+
+/* State 2: Exclude (Red / Line-through) */
+.tristate-chip.state-exclude {
+  background-color: #fff1f2;
+  color: #9f1239;
+  border-color: #f43f5e;
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+/* Standard Status / Lang filter chip */
+.filter-chip {
+  cursor: pointer;
+  user-select: none;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 400;
+  border: 1px solid #e1e4e8;
+  background-color: #ffffff;
+  color: #4b5563;
+  transition: all 0.15s ease;
+}
+
+.filter-chip:hover {
+  background-color: #f3f4f6;
+  border-color: #cbd5e1;
+}
+
+.filter-chip.active {
+  background-color: #111827;
+  color: #ffffff;
+  border-color: #111827;
+  font-weight: 500;
+}
+
+.shadow-xs {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}

@@ -169,7 +169,7 @@ export default function App() {
                 <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
                   <div className="d-flex align-items-center gap-2">
                     <span className="badge bg-dark rounded-pill px-2 py-1">Top</span>
-                    <h6 className="fw-bold mb-0 text-dark">Featured MTL Archives</h6>
+                    <h6 className="fw-bold mb-0 text-dark">Featured Books</h6>
                   </div>
                   <span className="text-muted small" style={{ fontSize: '11px' }}>
                     Scroll to explore popular titles
@@ -365,9 +365,9 @@ export default function App() {
           <div className="col-12 col-xl-10">
             <div className="d-flex align-items-center justify-content-between mb-3">
               <div>
-                <h5 className="fw-bold text-dark mb-0">EPUB Novel Archives</h5>
+                <h5 className="fw-bold text-dark mb-0">EPUB Novel Library</h5>
                 <p className="text-muted small mb-0" style={{ fontSize: '12px' }}>
-                  Total {totalCount} archives ready for offline reading
+                  Total {totalCount} books ready for offline reading
                 </p>
               </div>
             </div>
@@ -436,7 +436,7 @@ export default function App() {
       {/* Footer with clean credits */}
       <footer className="footer mt-auto py-3 bg-white border-top text-center text-muted small" style={{ fontSize: '12px' }}>
         <div className="container d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
-          <span>Novel MTL Archive &copy; 2026 &bull; Direct Offline MTL EPUB Downloader</span>
+          <span>Read This &copy; 2026 &bull; Direct EPUB Downloader</span>
           <div className="d-flex align-items-center gap-3">
             {readerApps && readerApps.length > 0 && (
               <div className="d-flex align-items-center gap-2">

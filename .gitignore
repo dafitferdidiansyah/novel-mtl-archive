@@ -6,8 +6,11 @@ __pycache__/
 .venv/
 env/
 venv/
+staticfiles/
 media/covers/*
 !media/covers/.gitkeep
+media/epubs/*
+!media/epubs/.gitkeep
 
 # Node / Vite
 node_modules/

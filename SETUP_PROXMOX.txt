@@ -1,0 +1,75 @@
+================================================================================
+PANDUAN SETUP 24/7 PROXMOX BACKEND (DJANGO + PM2 + NGROK)
+URL ENDPOINT NGROK: https://playset-setting-supermom.ngrok-free.dev
+================================================================================
+
+LANGKAH 1: INSTALL PACKAGE DI PROXMOX (LXC / VM UBUNTU/DEBIAN)
+Jalankan di terminal Proxmox:
+
+sudo apt update && sudo apt install -y python3 python3-pip python3-venv git curl nodejs npm
+sudo npm install -g pm2
+
+# Install Ngrok CLI:
+curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt update && sudo apt install -y ngrok
+
+# Hubungkan token Ngrok akun Anda:
+ngrok config add-authtoken <MASUKKAN_AUTHTOKEN_NGROK_ANDA>
+
+
+================================================================================
+LANGKAH 2: SETUP PROJECT & PYTHON VENV
+================================================================================
+git clone https://github.com/dafitferdidiansyah/novel-mtl-archive.git /opt/novel-mtl-archive
+cd /opt/novel-mtl-archive/backend
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install gunicorn
+
+# Migrate database
+python manage.py migrate
+
+# Scan folder EPUB lokal Anda di Proxmox (ganti path sesuai folder Anda):
+python manage.py scan_epubs /path/ke/folder/epub/novel
+
+
+================================================================================
+LANGKAH 3: JALANKAN 24/7 DENGAN PM2
+================================================================================
+cd /opt/novel-mtl-archive
+
+# Jalankan backend dan ngrok sekaligus
+pm2 start ecosystem.config.js
+
+# Simpan state agar jika Proxmox reboot, backend otomatis jalan sendiri:
+pm2 save
+pm2 startup
+# (Salin dan jalankan perintah "sudo env PATH=..." yang dimunculkan oleh PM2)
+
+
+================================================================================
+LANGKAH 4: CEK STATUS & LOGS
+================================================================================
+# Cek apakah kedua service running:
+pm2 status
+
+# Lihat log ngrok:
+pm2 logs epub-ngrok
+
+# Lihat log django backend:
+pm2 logs epub-backend
+
+
+================================================================================
+CATATAN GITHUB PAGES:
+================================================================================
+Secret GitHub VITE_API_URL telah otomatis disetel ke:
+https://playset-setting-supermom.ngrok-free.dev
+
+Frontend website Anda di GitHub Pages:
+https://dafitferdidiansyah.github.io/novel-mtl-archive/
+Akan langsung terhubung ke server Proxmox Anda secara real-time!
+================================================================================

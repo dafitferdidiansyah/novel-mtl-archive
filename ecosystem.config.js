@@ -16,7 +16,7 @@ module.exports = {
     {
       name: 'epub-ngrok',
       script: 'ngrok',
-      args: 'http 8000',
+      args: 'http 8000 --url https://playset-setting-supermom.ngrok-free.dev',
       restart_delay: 5000,
       max_restarts: 10,
     },
